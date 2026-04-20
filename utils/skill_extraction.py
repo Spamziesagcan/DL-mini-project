@@ -1,0 +1,69 @@
+from __future__ import annotations
+
+import re
+from typing import Sequence
+
+
+SKILL_ALIASES: dict[str, tuple[str, ...]] = {
+    "python": ("python",),
+    "sql": ("sql",),
+    "machine learning": ("ml", "machine learning"),
+    "nlp": ("nlp", "natural language processing"),
+    "aws": ("aws", "amazon web services"),
+    "html": ("html",),
+    "css": ("css",),
+    "javascript": ("javascript", "js"),
+    "react": ("react", "reactjs"),
+    "node.js": ("node.js", "nodejs", "node"),
+    "frontend": ("frontend", "front end"),
+    "backend": ("backend", "back end"),
+    "django": ("django",),
+    "flask": ("flask",),
+    "tensorflow": ("tensorflow",),
+    "pytorch": ("pytorch",),
+    "keras": ("keras",),
+    "pandas": ("pandas",),
+    "numpy": ("numpy",),
+    "scikit-learn": ("scikit-learn", "sklearn"),
+    "docker": ("docker",),
+    "git": ("git",),
+    "linux": ("linux",),
+    "excel": ("excel",),
+    "tableau": ("tableau",),
+    "spark": ("spark",),
+    "hadoop": ("hadoop",),
+}
+
+ROLE_SKILL_HINTS: dict[str, tuple[str, ...]] = {
+    "web developer": ("html", "css", "javascript", "react", "frontend"),
+    "frontend developer": ("html", "css", "javascript", "react", "frontend"),
+    "backend developer": ("python", "sql", "django", "flask", "backend"),
+    "full stack developer": ("html", "css", "javascript", "react", "node.js", "frontend", "backend"),
+}
+
+
+def _match_skill(text: str, skill_aliases: Sequence[str]) -> bool:
+    for alias in skill_aliases:
+        pattern = re.escape(alias.lower()).replace(r"\ ", r"[\s\-]+")
+        if re.search(rf"\b{pattern}\b", text):
+            return True
+    return False
+
+
+def extract_skills(text: str) -> tuple[list[str], list[str]]:
+    """Extract predefined skills from text using simple keyword and role matching."""
+    normalized_text = re.sub(r"\s+", " ", (text or "").lower())
+
+    matched_skills: list[str] = []
+    for skill, aliases in SKILL_ALIASES.items():
+        if _match_skill(normalized_text, aliases):
+            matched_skills.append(skill)
+
+    for role, role_skills in ROLE_SKILL_HINTS.items():
+        if _match_skill(normalized_text, (role,)):
+            for skill in role_skills:
+                if skill not in matched_skills:
+                    matched_skills.append(skill)
+
+    missing_skills = [skill for skill in SKILL_ALIASES if skill not in matched_skills]
+    return matched_skills, missing_skills
