@@ -1,7 +1,11 @@
 from __future__ import annotations
 
-from tensorflow.keras.layers import Concatenate, Dense, Embedding, Input, LSTM
-from tensorflow.keras.models import Model
+from utils.keras_backend import configure_keras_backend
+
+configure_keras_backend()
+
+from keras.layers import Concatenate, Dense, Embedding, Input, LSTM
+from keras.models import Model
 
 
 def _build_text_encoder(max_length: int, vocab_size: int, embedding_dim: int) -> Model:
