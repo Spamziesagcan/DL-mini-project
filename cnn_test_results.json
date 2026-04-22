@@ -1,0 +1,307 @@
+{
+  "Bansari Naik": {
+    "Full Stack Developer": {
+      "cnn_score": 87.42742156982422,
+      "probability": 0.8742741942405701,
+      "matched_skills": [
+        "javascript",
+        "react",
+        "node.js",
+        "rest apis",
+        "postgresql",
+        "git",
+        "html",
+        "css",
+        "frontend",
+        "backend"
+      ],
+      "missing_skills": [
+        "express",
+        "microservices",
+        "mongodb",
+        "docker"
+      ]
+    },
+    "Frontend Developer": {
+      "cnn_score": 84.70496368408203,
+      "probability": 0.8470496535301208,
+      "matched_skills": [
+        "javascript",
+        "html",
+        "css",
+        "react",
+        "frontend",
+        "tailwind",
+        "testing"
+      ],
+      "missing_skills": []
+    },
+    "Backend Developer": {
+      "cnn_score": 63.20365524291992,
+      "probability": 0.632036566734314,
+      "matched_skills": [
+        "python",
+        "backend",
+        "rest apis",
+        "postgresql"
+      ],
+      "missing_skills": [
+        "sql",
+        "django",
+        "flask",
+        "microservices",
+        "docker",
+        "linux"
+      ]
+    },
+    "MERN Stack Developer": {
+      "cnn_score": 70.51134490966797,
+      "probability": 0.7051134705543518,
+      "matched_skills": [
+        "javascript",
+        "html",
+        "css",
+        "react",
+        "node.js",
+        "tailwind",
+        "rest apis",
+        "git"
+      ],
+      "missing_skills": [
+        "express",
+        "mongodb"
+      ]
+    },
+    "Machine Learning Engineer": {
+      "cnn_score": 78.41717529296875,
+      "probability": 0.7841717600822449,
+      "matched_skills": [
+        "python",
+        "pandas",
+        "numpy",
+        "scikit-learn"
+      ],
+      "missing_skills": [
+        "machine learning",
+        "nlp",
+        "tensorflow",
+        "pytorch",
+        "keras",
+        "docker"
+      ]
+    },
+    "Data Scientist": {
+      "cnn_score": 82.9699935913086,
+      "probability": 0.8296999335289001,
+      "matched_skills": [
+        "python",
+        "pandas",
+        "numpy",
+        "scikit-learn"
+      ],
+      "missing_skills": [
+        "sql",
+        "machine learning",
+        "tableau"
+      ]
+    },
+    "Java Developer": {
+      "cnn_score": 73.29165649414062,
+      "probability": 0.7329165935516357,
+      "matched_skills": [
+        "java",
+        "spring",
+        "rest apis",
+        "git",
+        "testing"
+      ],
+      "missing_skills": [
+        "sql",
+        "microservices",
+        "linux",
+        "maven",
+        "gradle",
+        "junit",
+        "mockito"
+      ]
+    },
+    "Full Stack Web Engineer": {
+      "cnn_score": 71.5739517211914,
+      "probability": 0.7157394886016846,
+      "matched_skills": [
+        "python",
+        "javascript",
+        "html",
+        "css",
+        "react",
+        "node.js",
+        "frontend",
+        "tailwind",
+        "backend",
+        "postgresql",
+        "git"
+      ],
+      "missing_skills": [
+        "express",
+        "django",
+        "mongodb",
+        "docker",
+        "linux",
+        "ci/cd"
+      ]
+    }
+  },
+  "Chaitanya Shah": {
+    "Full Stack Developer": {
+      "cnn_score": 82.85800170898438,
+      "probability": 0.8285800218582153,
+      "matched_skills": [
+        "javascript",
+        "react",
+        "node.js",
+        "express",
+        "git",
+        "html",
+        "css",
+        "backend"
+      ],
+      "missing_skills": [
+        "rest apis",
+        "microservices",
+        "postgresql",
+        "mongodb",
+        "docker",
+        "frontend"
+      ]
+    },
+    "Frontend Developer": {
+      "cnn_score": 83.47709655761719,
+      "probability": 0.8347709774971008,
+      "matched_skills": [
+        "javascript",
+        "html",
+        "css",
+        "react"
+      ],
+      "missing_skills": [
+        "frontend",
+        "tailwind",
+        "testing"
+      ]
+    },
+    "Backend Developer": {
+      "cnn_score": 43.21073913574219,
+      "probability": 0.4321073889732361,
+      "matched_skills": [
+        "python",
+        "sql",
+        "backend"
+      ],
+      "missing_skills": [
+        "django",
+        "flask",
+        "rest apis",
+        "microservices",
+        "postgresql",
+        "docker",
+        "linux"
+      ]
+    },
+    "MERN Stack Developer": {
+      "cnn_score": 81.05303955078125,
+      "probability": 0.810530424118042,
+      "matched_skills": [
+        "javascript",
+        "html",
+        "css",
+        "react",
+        "node.js",
+        "express",
+        "git"
+      ],
+      "missing_skills": [
+        "tailwind",
+        "rest apis",
+        "mongodb"
+      ]
+    },
+    "Machine Learning Engineer": {
+      "cnn_score": 83.36587524414062,
+      "probability": 0.833658754825592,
+      "matched_skills": [
+        "python",
+        "pandas",
+        "numpy"
+      ],
+      "missing_skills": [
+        "machine learning",
+        "nlp",
+        "tensorflow",
+        "pytorch",
+        "keras",
+        "scikit-learn",
+        "docker"
+      ]
+    },
+    "Data Scientist": {
+      "cnn_score": 70.23079681396484,
+      "probability": 0.7023079991340637,
+      "matched_skills": [
+        "python",
+        "sql",
+        "pandas",
+        "numpy",
+        "tableau"
+      ],
+      "missing_skills": [
+        "machine learning",
+        "scikit-learn"
+      ]
+    },
+    "Java Developer": {
+      "cnn_score": 83.84978485107422,
+      "probability": 0.8384978771209717,
+      "matched_skills": [
+        "java",
+        "sql",
+        "git"
+      ],
+      "missing_skills": [
+        "spring",
+        "rest apis",
+        "microservices",
+        "linux",
+        "maven",
+        "gradle",
+        "junit",
+        "mockito",
+        "testing"
+      ]
+    },
+    "Full Stack Web Engineer": {
+      "cnn_score": 85.5286865234375,
+      "probability": 0.8552868962287903,
+      "matched_skills": [
+        "python",
+        "javascript",
+        "html",
+        "css",
+        "react",
+        "node.js",
+        "express",
+        "backend",
+        "git"
+      ],
+      "missing_skills": [
+        "django",
+        "frontend",
+        "tailwind",
+        "postgresql",
+        "mongodb",
+        "docker",
+        "linux",
+        "ci/cd"
+      ]
+    }
+  }
+}

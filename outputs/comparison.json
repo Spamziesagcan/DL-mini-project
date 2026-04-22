@@ -1,0 +1,91 @@
+[
+  {
+    "resume_path": "C:\\Users\\HP\\OneDrive\\Desktop\\bansari projects\\college\\DL-mini-project\\BansariNaik-thirdyr.pdf",
+    "job_description_preview": "Full stack developer with Python, React, Node.js, SQL, Docker, Git, REST APIs",
+    "lstm_score": 49.47,
+    "cnn_score": 48.81,
+    "ensemble_score": 49.14,
+    "explanation": {
+      "matched_skills": [
+        "backend",
+        "css",
+        "frontend",
+        "git",
+        "html",
+        "javascript",
+        "node.js",
+        "python",
+        "react",
+        "rest apis"
+      ],
+      "missing_skills": [
+        "docker",
+        "sql"
+      ],
+      "resume_only_skills": [
+        "java",
+        "mysql",
+        "numpy",
+        "pandas",
+        "postgresql",
+        "scikit-learn",
+        "spring",
+        "tailwind",
+        "testing"
+      ],
+      "jd_only_skills": [
+        "docker",
+        "sql"
+      ],
+      "resume_skill_count": 19,
+      "jd_skill_count": 12,
+      "overlap_ratio": 0.8333,
+      "recommendation": "Skill-aligned profile. Model confidence is conservative, so use the skill overlap to guide manual review."
+    },
+    "score_chart_path": "outputs\\BansariNaik-thirdyr_score_summary.png",
+    "skill_chart_path": "outputs\\BansariNaik-thirdyr_skill_alignment.png"
+  },
+  {
+    "resume_path": "C:\\Users\\HP\\OneDrive\\Desktop\\bansari projects\\college\\DL-mini-project\\ChaitanyaShah_Resume (1).pdf",
+    "job_description_preview": "Full stack developer with Python, React, Node.js, SQL, Docker, Git, REST APIs",
+    "lstm_score": 49.33,
+    "cnn_score": 48.72,
+    "ensemble_score": 49.02,
+    "explanation": {
+      "matched_skills": [
+        "backend",
+        "css",
+        "git",
+        "html",
+        "javascript",
+        "node.js",
+        "python",
+        "react",
+        "sql"
+      ],
+      "missing_skills": [
+        "docker",
+        "frontend",
+        "rest apis"
+      ],
+      "resume_only_skills": [
+        "express",
+        "java",
+        "numpy",
+        "pandas",
+        "tableau"
+      ],
+      "jd_only_skills": [
+        "docker",
+        "frontend",
+        "rest apis"
+      ],
+      "resume_skill_count": 14,
+      "jd_skill_count": 12,
+      "overlap_ratio": 0.75,
+      "recommendation": "Skill-aligned profile. Model confidence is conservative, so use the skill overlap to guide manual review."
+    },
+    "score_chart_path": "outputs\\ChaitanyaShah_Resume_(1)_score_summary.png",
+    "skill_chart_path": "outputs\\ChaitanyaShah_Resume_(1)_skill_alignment.png"
+  }
+]

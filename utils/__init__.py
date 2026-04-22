@@ -1,4 +1,4 @@
 from .synthetic_data import generate_synthetic_training_data
-from .score_combiner import combine_similarity_scores
 from .skill_extraction import extract_skills
+from .reporting import MatchExplanation, MatchResult, build_match_explanation
 

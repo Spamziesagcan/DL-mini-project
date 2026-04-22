@@ -1,528 +1,405 @@
-# Resume Screening: LSTM vs CNN Architecture
+# Resume Screening System - Architecture
+
+**Project**: Resume Screening System using Deep Learning  
+**Date**: April 22, 2026  
+**Interface**: CLI only  
+**Models**: LSTM and CNN for resume-to-job-description similarity
+
+---
 
 ## Overview
 
-This document explains the LSTM and CNN architectures used in the resume screening system, how they work for matching resumes with job descriptions, and which approach is better for different use cases.
+This project is a command-line resume screening system.
+
+It does one thing:
+
+1. read a resume from PDF,
+2. compare it against a job description,
+3. run two deep learning models on the same input pair,
+4. report the raw `LSTM` score and raw `CNN` score,
+5. add explainable skill overlap output and graphs.
+
+There is no frontend in the current architecture.
 
 ---
 
-## 1. LSTM Architecture for Resume Screening
+## Current Goal
 
-### What is LSTM?
+The system is designed to test **only two models** on resumes:
 
-LSTM (Long Short-Term Memory) is a type of Recurrent Neural Network (RNN) that can handle sequential data and capture long-range dependencies. Unlike traditional RNNs, LSTMs have memory cells that can store information over long sequences.
+- `LSTM`
+- `CNN`
 
-### Architecture Flow
+The numeric scores shown in the CLI come only from those two models.
 
-```
-Resume Text (Tokenized)
-           ↓
-      Embedding Layer (64-dim)
-      vocab_size × 64 matrix
-           ↓
-      LSTM Layer (64 units)
-      Processes sequence sequentially
-      Maintains memory across tokens
-           ↓
-      Output Vector (64-dim)
-           ↓
-    [Concatenate with JD Vector]
-           ↓
-      Dense Layer (64 units, ReLU)
-           ↓
-      Output Layer (1 unit, Sigmoid)
-      [Similarity Score: 0-1]
-```
+The project also prints:
 
-### Detailed Components
+- matched skills
+- missing skills
+- resume-only skills
+- recommendation text
+- graphs
 
-1. **Embedding Layer**
-   - Input: Tokenized resume (sequence of integers)
-   - Output: Dense vectors of size 64
-   - Purpose: Convert discrete tokens to continuous representations
-   - Vocabulary size: Dynamic (based on training data)
-
-2. **LSTM Layer**
-   - Units: 64
-   - Key Features:
-     - **Cell State (C)**: Memory that persists across the sequence
-     - **Hidden State (H)**: Information passed to next timestep
-     - **3 Gates**:
-       - **Forget Gate**: Decides what to discard from memory
-       - **Input Gate**: Decides what new information to store
-       - **Output Gate**: Decides what to output based on memory
-   - Processing: Sequential (word by word)
-   - Output: Final hidden state (64-dim vector)
-
-3. **Merging Strategy**
-   - Both resume and JD are encoded separately using the same LSTM encoder
-   - Outputs are concatenated: [Resume_vector (64) + JD_vector (64)] = 128-dim vector
-
-4. **Dense Layers**
-   - Hidden Dense Layer: 64 units with ReLU activation
-   - Output Layer: 1 unit with Sigmoid activation (outputs 0-1)
-
-### Key Characteristics of LSTM
-
-✅ **Strengths:**
-
-- Captures sequential patterns and word order
-- Remembers long dependencies in text
-- Good at understanding context across entire document
-- Better for capturing grammar and syntax
-
-❌ **Limitations:**
-
-- Slower training and inference (processes sequentially)
-- More parameters to train
-- May overfit on smaller datasets
-- Computational overhead for long sequences
-
-### Training Configuration
-
-```python
-Optimizer: Adam
-Loss Function: Binary Crossentropy (similarity = 0 or 1)
-Epochs: 8
-Batch Size: 8
-Metrics: Accuracy
-```
+These are **explainability and reporting layers**. They do **not** change the raw LSTM or CNN score.
 
 ---
 
-## 2. CNN Architecture for Resume Screening
+## Runtime Flow
 
-### What is CNN?
-
-CNN (Convolutional Neural Network) uses convolutional filters to detect local patterns in data. For text, it looks for n-gram patterns (phrases) rather than sequential dependencies.
-
-### Architecture Flow
-
-```
-Resume Text (Tokenized)
-           ↓
-      Embedding Layer (64-dim)
-      vocab_size × 64 matrix
-           ↓
-      Conv1D Layer (64 filters, kernel=5)
-      Detects local 5-word patterns
-      Padding: 'same' (maintain length)
-           ↓
-      GlobalMaxPooling1D Layer
-      Select most important feature per filter
-      Output: 64-dim vector
-           ↓
-      Dense Layer (64 units, ReLU)
-           ↓
-    [Concatenate with JD Vector]
-           ↓
-      Dense Layer (64 units, ReLU)
-           ↓
-      Output Layer (1 unit, Sigmoid)
-      [Similarity Score: 0-1]
-```
-
-### Detailed Components
-
-1. **Embedding Layer** (Same as LSTM)
-   - Input: Tokenized resume
-   - Output: Dense vectors of size 64
-   - Purpose: Convert tokens to embeddings
-
-2. **Conv1D Layer** (1D Convolution)
-   - Filters: 64
-   - Kernel Size: 5 (looks at 5 consecutive words = 5-grams)
-   - Activation: ReLU
-   - Padding: Same (maintains sequence length)
-   - Purpose: Detect local phrase patterns
-
-   **How it works:**
-
-   ```
-   Input sequence: [w1, w2, w3, w4, w5, w6, w7, ...]
-
-   Each filter slides across with kernel_size=5:
-   Filter 1: [w1 w2 w3 w4 w5] → feature_1
-   Filter 1: [w2 w3 w4 w5 w6] → feature_2
-   Filter 1: [w3 w4 w5 w6 w7] → feature_3
-   ... (64 filters doing this in parallel)
-
-   Result: 64 × sequence_length feature map
-   ```
-
-3. **GlobalMaxPooling1D Layer**
-   - Purpose: Select the most important feature from each filter
-   - Operation: Takes max value across the entire sequence for each filter
-   - Output: 64-dim vector (best representation of each pattern)
-
-4. **Dense Layers**
-   - Hidden Dense: 64 units with ReLU
-   - Output Dense: 1 unit with Sigmoid
-
-### Key Characteristics of CNN
-
-✅ **Strengths:**
-
-- Very fast inference (parallel convolutions)
-- Captures local n-gram patterns efficiently
-- Great at finding keyword phrases and terminology
-- Low computational overhead
-- Faster training
-
-❌ **Limitations:**
-
-- Limited to local context (kernel_size=5)
-- May miss long-range semantic relationships
-- Less sensitive to word order beyond n-gram window
-- May underperform on grammatically complex sentences
-
-### Training Configuration
-
-```python
-Same as LSTM:
-Optimizer: Adam
-Loss Function: Binary Crossentropy
-Epochs: 8
-Batch Size: 8
-Metrics: Accuracy
-```
-
----
-
-## 3. How Both Models Are Used for Resume Screening
-
-### Pipeline Overview
-
-```
+```text
 Resume PDF
-    ↓
-[PDF Extraction] → Raw resume text
-    ↓
-[Text Cleaning] → Clean resume text
-    ↓
-[Tokenization & Padding] → Sequence of integers (length=200)
-    ↓
-┌─────────────────────────────────────────┐
-│                                         │
-│  LSTM Model          CNN Model          │
-│  │                   │                  │
-│  ├→ Similarity Score ├→ Similarity Score│
-│                 %            %          │
-│                                         │
-└─────────────────────────────────────────┘
-    ↓
-[Ensemble Combination]
-    ↓
-Final Match Score = (LSTM + CNN) / 2
-    ↓
-[Skill Extraction & Matching]
-    ↓
-Final Results with:
-- LSTM Score
-- CNN Score
-- Matched Skills
-- Missing Skills
-```
-
-### Prediction Process
-
-1. **Text Preparation**
-
-   ```python
-   Resume text: "Bansari Naik with 3 years in Python..."
-   JD text: "Seeking Python developer with ML experience..."
-   ```
-
-2. **Tokenization** (Uses fitted tokenizer from training)
-
-   ```python
-   Resume: [45, 23, 189, 12, 78, 34, ...]  # 200 tokens
-   JD:     [89, 12, 45, 156, 23, 67, ...]  # 200 tokens
-   ```
-
-3. **Parallel Model Inference**
-
-   ```
-   LSTM Model:
-   [resume_tokens, jd_tokens] → LSTM Encoder → 64-dim vectors
-                             → Concatenate → Dense → Output
-                             → LSTM Score (0-1)
-
-   CNN Model:
-   [resume_tokens, jd_tokens] → CNN Encoder → 64-dim vectors
-                             → Concatenate → Dense → Output
-                             → CNN Score (0-1)
-   ```
-
-4. **Score Combination**
-   ```
-   Final Score = (LSTM_Score + CNN_Score) / 2
-   Example: (0.4448 + 0.4218) / 2 = 0.4333 = 43.33%
-   ```
-
-### Real Example Output
-
-```
-LSTM Score:    44.48%  (Good at sequential understanding)
-CNN Score:     42.18%  (Good at keyword matching)
-Final Score:   43.33%  (Ensemble average)
-TF-IDF Score:   5.47%  (Traditional baseline - for comparison)
+  ->
+PDF text extraction
+  ->
+text cleaning
+  ->
+tokenization + padding
+  ->
+same resume/JD pair sent to:
+  - LSTM similarity model
+  - CNN similarity model
+  ->
+raw sigmoid outputs
+  ->
+percent conversion
+  ->
+CLI report + graphs + JSON export
 ```
 
 ---
 
-## 4. Comparison: LSTM vs CNN
+## CLI Architecture
 
-### Performance Comparison Table
+The current entrypoint is:
 
-| Aspect                | LSTM                         | CNN                   |
-| --------------------- | ---------------------------- | --------------------- |
-| **Speed**             | Slower (sequential)          | Faster (parallel)     |
-| **Context Range**     | Long-range (entire document) | Local (5-word window) |
-| **Training Time**     | ~5-10 seconds                | ~2-3 seconds          |
-| **Parameters**        | ~30K+                        | ~20K+                 |
-| **Pattern Detection** | Sequential dependencies      | N-gram patterns       |
-| **Memory Usage**      | Higher                       | Lower                 |
-| **GPU Utilization**   | Lower                        | Higher                |
+- `main.py`
 
-### When to Use Each
+It forwards to:
 
-#### ✅ Use LSTM When:
+- `cli.py`
 
-- Resume has important information spread across different sections
-- Grammar and sentence structure matter
-- You want to understand the overall narrative of the resume
-- You have computational resources available
-- Resume length can vary significantly
-- You need to understand complex relationships between far-apart tokens
+Main commands:
 
-**Example:** Detecting that "3 years of experience in ML" scattered in different sections is more relevant than isolated keywords.
+- `python main.py warmup`
+- `python main.py match --resume <pdf> --jd-text "..."`
+- `python main.py compare --resumes <pdf1> <pdf2> --jd-text "..."`
 
-#### ✅ Use CNN When:
+### Command Roles
 
-- You want fast inference for real-time applications
-- Server/computational resources are limited
-- Specific technical keywords and phrases matter most
-- You need to scale to many concurrent requests
-- Resume structure is relatively consistent
-- Local context (skills, technologies) is more important than global understanding
-
-**Example:** Quickly matching job requirements like "TensorFlow, Keras, Python" to resume keywords.
+- `warmup`: builds reusable local artifacts for faster later runs
+- `match`: tests one resume against one job description
+- `compare`: tests multiple resumes against one job description and ranks them
 
 ---
 
-## 5. Which Model is Better?
+## Code Structure
 
-### Verdict: **It Depends on Your Use Case**
+### Core Files
 
-#### For Your Resume Screening Project:
+- `main.py`: CLI entrypoint
+- `cli.py`: argument parsing and terminal output
+- `pipeline.py`: end-to-end screening pipeline
 
-**Current Results:**
+### Preprocessing
 
-- LSTM: 44.48% match
-- CNN: 42.18% match
-- Difference: Only 2.3%
+- `preprocessing/pdf_text.py`: extract text from PDF using `pdfplumber`
+- `preprocessing/text_cleaning.py`: lowercase, punctuation removal, tokenization, stopword filtering
+- `preprocessing/tokenizer_pipeline.py`: custom tokenizer + padding utilities
 
-**Winner: LSTM by marginal advantage**
+### Models
 
-### Why LSTM Wins (Slightly):
+- `models/lstm_similarity.py`: LSTM similarity model definition
+- `models/cnn_text_classification.py`: CNN similarity model definition
+- `models/similarity_runtime.py`: artifact loading, fallback bootstrap training, and prediction
 
-1. **Better Understanding**: LSTM captures that you mention "Machine Learning, Neural Networks, Deep Learning" across your resume
-2. **Context Awareness**: Understands the relationship between these concepts
-3. **Narrative Understanding**: Recognizes you're describing a coherent skill set
+### Explainability and Reporting
 
-### Why CNN Still Performs Well:
+- `utils/skill_extraction.py`: rule-based skill extraction
+- `utils/reporting.py`: explanation objects and recommendation logic
+- `utils/visualization.py`: graph generation
 
-1. **Quick Pattern Matching**: Rapidly identifies key phrases like "Python", "TensorFlow", "NLP"
-2. **Efficiency**: Much faster to score (important for screening many resumes)
-3. **Close Results**: Only 2.3% difference suggests CNN captures most essential information
+### Tests
 
-### Recommendation for Production
-
-**Use Ensemble Approach** (What Your Code Already Does!) ✅
-
-```
-Advantages of combining both:
-1. ✅ Captures both sequential and local patterns
-2. ✅ More robust (if one model fails, other provides value)
-3. ✅ Balanced accuracy from both perspectives
-4. ✅ Averages out model-specific biases
-
-Current Formula:
-Final Score = (LSTM_Score + CNN_Score) / 2
-
-Could be improved with:
-Final Score = (LSTM_Score × 0.6 + CNN_Score × 0.4)
-              ↑ More weight to better performing model
-```
+- `tests/test_cli.py`
+- `tests/test_pipeline.py`
+- `tests/test_reporting.py`
 
 ---
 
-## 6. Optimization Suggestions
+## Preprocessing Pipeline
 
-### To Improve Both Models:
+### Step 1: PDF Extraction
 
-1. **Increase Training Data**
+Resume text is extracted from PDF pages with `pdfplumber`.
 
-   ```python
-   # Current: ~30 synthetic training pairs
-   # Suggested: 100-500 real resume-JD pairs
-   ```
+### Step 2: Cleaning
 
-2. **Tune Hyperparameters**
+The text is normalized by:
 
-   ```python
-   # Test different values:
-   - LSTM units: 32, 64, 128
-   - CNN filters: 32, 64, 96, 128
-   - Kernel sizes: 3, 5, 7
-   - Embedding dimensions: 32, 64, 100
-   ```
+- converting to lowercase
+- removing punctuation
+- tokenizing words
+- removing stopwords
 
-3. **Add Attention Mechanisms** (Advanced)
+### Step 3: Tokenization
 
-   ```python
-   # Attention helps both models focus on important parts
-   # Would improve both LSTM and CNN significantly
-   ```
+The project uses a lightweight custom tokenizer for runtime text preparation.
 
-4. **Increase Epochs** (With validation-based early stopping)
-   ```python
-   # Current: 8 epochs
-   # Suggested: 20-50 epochs with early stopping
-   ```
+### Step 4: Padding
+
+Sequences are padded or truncated to a fixed length.
+
+Current runtime setting:
+
+- `max_sequence_length = 60`
 
 ---
 
-## 7. Architecture Diagrams
+## LSTM Model
 
-### LSTM Detailed Flow
+The LSTM model is a dual-input similarity model.
 
-```
-┌─────────────────┐
-│ Resume Tokens   │
-│  [45, 23, 189]  │
-└────────┬────────┘
-         │
-         ↓
-    ┌────────────────────┐
-    │ Embedding Layer    │
-    │ 45 → [0.2, 0.5...] │
-    │ 23 → [0.1, 0.8...] │
-    │189 → [0.9, 0.3...] │
-    └────────┬───────────┘
-             │
-             ↓
-    ┌────────────────────────────────────┐
-    │ LSTM Cell (with internal gates)     │
-    │                                    │
-    │  Input: embedding                  │
-    │  forget_gate: drop irrelevant info  │
-    │  input_gate: add new info           │
-    │  output_gate: produce output        │
-    │  cell_state: memory                 │
-    │                                    │
-    │  Process: [emb1] → [emb2] → [emb3] │
-    │           ↓       ↓        ↓       │
-    │          (update cell state)        │
-    │                                    │
-    │  Output: 64-dim final state vector  │
-    └────────┬────────────────────────────┘
-             │
-       ┌─────┴─────┐
-       ↓           ↓
-   [64-vec]   [64-vec]
-   Resume     JD
-       │           │
-       └─────┬─────┘
-             ↓
-      [128-vec concatenated]
-             ↓
-      Dense(64, ReLU)
-             ↓
-      Dense(1, Sigmoid)
-             ↓
-         [Score: 0-1]
+### Structure
+
+```text
+resume tokens -> shared embedding -> LSTM -> resume vector
+jd tokens     -> shared embedding -> LSTM -> jd vector
+
+resume vector + jd vector
+  ->
+concatenate
+  ->
+dense
+  ->
+sigmoid
+  ->
+similarity score
 ```
 
-### CNN Detailed Flow
+### Current Runtime Configuration
 
-```
-┌──────────────────┐
-│ Resume Tokens    │
-│ [45, 23, 189...]  │
-└────────┬─────────┘
-         │
-         ↓
-    ┌────────────────────┐
-    │ Embedding Layer    │
-    │ 45 → [0.2, 0.5...] │
-    │ 23 → [0.1, 0.8...] │
-    │189 → [0.9, 0.3...] │
-    └────────┬───────────┘
-             │
-             ↓
-    ┌──────────────────────────────────┐
-    │ Conv1D (64 filters, kernel=5)    │
-    │                                  │
-    │ Window 1: [emb1,emb2,emb3,      │
-    │            emb4,emb5] → feat_1  │
-    │ Window 2: [emb2,emb3,emb4,      │
-    │            emb5,emb6] → feat_2  │
-    │ ... (64 filters doing this)      │
-    │                                  │
-    │ Output: 64 × 200 feature map     │
-    └────────┬───────────────────────────┘
-             │
-             ↓
-    ┌──────────────────────────────────┐
-    │ GlobalMaxPooling1D Layer         │
-    │                                  │
-    │ For each of 64 filters:          │
-    │   Take MAX(features) → 1 value   │
-    │                                  │
-    │ Output: 64-dim vector            │
-    │ (best representation per filter) │
-    └────────┬───────────────────────────┘
-             │
-       ┌─────┴─────┐
-       ↓           ↓
-   [64-vec]   [64-vec]
-   Resume     JD
-       │           │
-       └─────┬─────┘
-             ↓
-      [128-vec concatenated]
-             ↓
-      Dense(64, ReLU)
-             ↓
-      Dense(1, Sigmoid)
-             ↓
-         [Score: 0-1]
-```
+- embedding dimension: `16`
+- LSTM units: `32`
+- hidden dense units: `32`
+- output: `1 sigmoid unit`
+
+### Purpose
+
+The LSTM is intended to capture sequential and contextual text patterns.
 
 ---
 
-## 8. Conclusion
+## CNN Model
 
-### Key Takeaways:
+The CNN model is also a dual-input similarity model.
 
-1. **LSTM** = Better for understanding overall context and relationships
-2. **CNN** = Better for speed and scalability
-3. **Ensemble** = Best of both worlds (your current approach!)
+### Structure
 
-### Your Current Implementation is Optimal:
+```text
+resume tokens -> shared embedding -> Conv1D -> GlobalMaxPool -> Dense -> resume vector
+jd tokens     -> shared embedding -> Conv1D -> GlobalMaxPool -> Dense -> jd vector
 
-Your code uses both models and averages them, which provides:
+resume vector + jd vector
+  ->
+concatenate
+  ->
+dense
+  ->
+sigmoid
+  ->
+similarity score
+```
 
-- ✅ Robust scoring
-- ✅ Balanced performance
-- ✅ Resilience to model-specific biases
-- ✅ Better generalization
+### Current Runtime Configuration
 
-### For Production Use:
+- embedding dimension: `16`
+- Conv1D filters: `32`
+- kernel size: `5`
+- encoder dense units: `32`
+- merge dense units: `32`
+- output: `1 sigmoid unit`
 
-- Continue using the ensemble approach
-- Monitor which model performs better on your data
-- Consider weighted averaging based on validation performance
-- Add A/B testing with real resumes to optimize weights
+### Purpose
+
+The CNN is intended to capture local lexical and phrase-level patterns.
+
+---
+
+## Scoring Logic
+
+This is the most important point in the current project.
+
+### Raw Model Scores
+
+The CLI reports:
+
+- `LSTM Score`
+- `CNN Score`
+
+Each one is computed as:
+
+```text
+sigmoid_output * 100
+```
+
+So if a model outputs `0.4912`, the displayed score is `49.12%`.
+
+### Ensemble Score
+
+The CLI also shows:
+
+```text
+Ensemble Score = (LSTM Score + CNN Score) / 2
+```
+
+This is only a reporting average. It is **not** a third model.
+
+### Explainability Is Separate
+
+These are not part of the raw neural score:
+
+- matched skills
+- missing skills
+- overlap ratio
+- recommendation text
+
+They are computed after model prediction and are used for interpretation only.
+
+---
+
+## Artifact Strategy
+
+The runtime first tries to load reusable local artifacts from:
+
+- `artifacts/tokenizer.pkl`
+- `artifacts/cnn_similarity_model.h5`
+- `artifacts/lstm_similarity_model.h5`
+
+If artifacts are missing, the system falls back to a lightweight bootstrap training process using synthetic text templates.
+
+The purpose of `warmup` is to create those artifacts ahead of time so later CLI runs are faster.
+
+---
+
+## Synthetic Bootstrap Training
+
+The fallback training path is intentionally small and fast.
+
+### Current Bootstrap Settings
+
+- sequence length: `60`
+- embedding dimension: `16`
+- epochs: `1`
+- batch size: `16`
+- negative ratio: `1.0`
+- limited bootstrap role profiles: `6`
+
+### Why This Exists
+
+The project needs to stay runnable even if pretrained artifacts are not already available locally.
+
+This fallback is for convenience, not for final-quality model calibration.
+
+---
+
+## Explainability Layer
+
+After the raw model scores are produced, the system performs rule-based skill extraction on:
+
+- the resume text
+- the job description text
+
+It then computes:
+
+- matched skills
+- missing skills
+- resume-only skills
+- overlap ratio
+
+This layer helps interpret results, especially because the current raw model outputs are conservative.
+
+---
+
+## Graph Generation
+
+For each run, the CLI can generate PNG charts:
+
+### Per Resume
+
+- score summary chart
+  - LSTM
+  - CNN
+  - ensemble
+
+- skill alignment chart
+  - matched skills
+  - missing skills
+  - resume-only skills
+
+### Comparison Mode
+
+- candidate comparison chart based on ensemble scores
+
+Output is written to `outputs/` by default.
+
+---
+
+## Current Observed Behavior
+
+Based on testing with the real resumes in this repository:
+
+- the skill extraction layer is informative,
+- the CLI and graph generation work correctly,
+- but the raw LSTM and CNN scores are still tightly clustered around `49%`.
+
+### What This Means
+
+The current models are being tested correctly on the resumes, but they are **not yet well calibrated**.
+
+For example:
+
+- frontend-aligned job descriptions should score higher for frontend-heavy resumes
+- data science job descriptions should score lower when the resume lacks data science skills
+
+At the moment, the explainability layer reflects those differences more clearly than the raw neural outputs.
+
+---
+
+## Known Limitations
+
+1. Raw model scores are too compressed.
+2. The bootstrap training data is synthetic and limited.
+3. The explainability layer is rule-based, not learned.
+4. The ensemble score is just an average, not a validated fusion model.
+5. TensorFlow prints a Windows GPU warning during runs.
+
+---
+
+## Recommended Next Technical Step
+
+If the goal is stronger model-only evaluation on your resumes, the next improvement should be:
+
+1. collect or construct better labeled resume/JD training examples,
+2. retrain the CNN and LSTM with clearer positive/negative separation,
+3. evaluate them across frontend, backend, and data science JDs,
+4. verify that raw LSTM/CNN scores move in the expected direction without relying on skill heuristics.
+
+---
+
+## Summary
+
+This project is now a **clean CLI architecture** for resume-to-job-description matching using:
+
+- `LSTM` for sequential similarity
+- `CNN` for local-pattern similarity
+
+The numeric scores shown to the user come directly from those two models.
+
+The surrounding reporting layer adds:
+
+- explanations
+- rankings
+- graphs
+- JSON export
+
+The system is operational and tested, but the current raw neural scores still need better calibration before they can be treated as strong standalone decision signals.

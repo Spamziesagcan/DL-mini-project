@@ -1,0 +1,91 @@
+[
+  {
+    "resume_path": "C:\\Users\\HP\\OneDrive\\Desktop\\bansari projects\\college\\DL-mini-project\\BansariNaik-thirdyr.pdf",
+    "job_description_preview": "Data Scientist with strong experience in Python, machine learning, statistics, pandas,...",
+    "lstm_score": 29.47,
+    "cnn_score": 30.12,
+    "ensemble_score": 49.29,
+    "explanation": {
+      "matched_skills": [
+        "numpy",
+        "pandas"
+      ],
+      "missing_skills": [
+        "machine learning",
+        "sql",
+        "tensorflow"
+      ],
+      "resume_only_skills": [
+        "backend",
+        "css",
+        "frontend",
+        "git",
+        "html",
+        "java",
+        "javascript",
+        "mysql",
+        "node.js",
+        "postgresql",
+        "react",
+        "rest apis",
+        "spring",
+        "tailwind",
+        "testing"
+      ],
+      "jd_only_skills": [
+        "machine learning",
+        "sql",
+        "tensorflow"
+      ],
+      "resume_skill_count": 19,
+      "jd_skill_count": 7,
+      "overlap_ratio": 0.5714,
+      "recommendation": "Weak fit for this job description. The current resume does not align with the required stack."
+    },
+    "score_chart_path": "outputs\\BansariNaik-thirdyr_score_summary.png",
+    "skill_chart_path": "outputs\\BansariNaik-thirdyr_skill_alignment.png"
+  },
+  {
+    "resume_path": "C:\\Users\\HP\\OneDrive\\Desktop\\bansari projects\\college\\DL-mini-project\\ChaitanyaShah_Resume (1).pdf",
+    "job_description_preview": "Data Scientist with strong experience in Python, machine learning, statistics, pandas,...",
+    "lstm_score": 29.33,
+    "cnn_score": 31.08,
+    "ensemble_score": 49.21,
+    "explanation": {
+      "matched_skills": [
+        "numpy",
+        "pandas",
+        "python",
+        "sql"
+      ],
+      "missing_skills": [
+        "machine learning",
+        "scikit-learn",
+        "tensorflow"
+      ],
+      "resume_only_skills": [
+        "backend",
+        "css",
+        "express",
+        "git",
+        "html",
+        "java",
+        "javascript",
+        "node.js",
+        "react",
+        "tableau"
+      ],
+      "jd_only_skills": [
+        "machine learning",
+        "scikit-learn",
+        "tensorflow"
+      ],
+      "resume_skill_count": 14,
+      "jd_skill_count": 7,
+      "overlap_ratio": 0.5714,
+      "recommendation": "Weak fit for this job description. The current resume does not align with the required stack."
+    },
+    "score_chart_path": "outputs\\ChaitanyaShah_Resume_(1)_score_summary.png",
+    "skill_chart_path": "outputs\\ChaitanyaShah_Resume_(1)_skill_alignment.png"
+  }
+]
