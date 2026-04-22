@@ -4,4 +4,4 @@ import os
 
 
 def configure_keras_backend() -> None:
-    os.environ.setdefault("KERAS_BACKEND", "torch")
+    os.environ.setdefault("KERAS_BACKEND", "tensorflow")

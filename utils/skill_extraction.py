@@ -5,33 +5,83 @@ from typing import Sequence
 
 
 SKILL_ALIASES: dict[str, tuple[str, ...]] = {
+    # Languages
     "python": ("python",),
-    "sql": ("sql",),
-    "machine learning": ("ml", "machine learning"),
-    "nlp": ("nlp", "natural language processing"),
-    "aws": ("aws", "amazon web services"),
+    "java": ("java",),
+    "javascript": ("javascript", "js"),
     "html": ("html",),
     "css": ("css",),
-    "javascript": ("javascript", "js"),
+    "sql": ("sql",),
+    
+    # Web Frameworks & Libraries
     "react": ("react", "reactjs"),
+    "angular": ("angular",),
     "node.js": ("node.js", "nodejs", "node"),
-    "frontend": ("frontend", "front end"),
-    "backend": ("backend", "back end"),
+    "express": ("express",),
     "django": ("django",),
     "flask": ("flask",),
+    "spring": ("spring", "spring framework", "spring boot"),
+    "jquery": ("jquery",),
+    "bootstrap": ("bootstrap",),
+    
+    # Frontend
+    "html": ("html",),
+    "css": ("css",),
+    "frontend": ("frontend", "front end"),
+    "tailwind": ("tailwind",),
+    "material design": ("material design", "material ui"),
+    
+    # Backend & Architecture
+    "backend": ("backend", "back end"),
+    "rest apis": ("rest api", "rest apis", "restful"),
+    "microservices": ("microservices", "microservice"),
+    
+    # Databases
+    "sql": ("sql",),
+    "mysql": ("mysql",),
+    "postgresql": ("postgresql", "postgres"),
+    "oracle": ("oracle",),
+    "mongodb": ("mongodb", "mongo"),
+    
+    # ORM & Persistence
+    "jpa": ("jpa",),
+    "hibernate": ("hibernate",),
+    
+    # ML/AI
+    "machine learning": ("ml", "machine learning"),
+    "nlp": ("nlp", "natural language processing"),
     "tensorflow": ("tensorflow",),
     "pytorch": ("pytorch",),
     "keras": ("keras",),
     "pandas": ("pandas",),
     "numpy": ("numpy",),
     "scikit-learn": ("scikit-learn", "sklearn"),
+    
+    # DevOps & Tools
     "docker": ("docker",),
     "git": ("git",),
     "linux": ("linux",),
+    "aws": ("aws", "amazon web services"),
+    "maven": ("maven",),
+    "gradle": ("gradle",),
+    "jenkins": ("jenkins",),
+    "ci/cd": ("ci/cd", "cicd", "continuous integration"),
+    
+    # Testing
+    "junit": ("junit",),
+    "mockito": ("mockito",),
+    "testing": ("testing", "test", "unit test"),
+    
+    # Data & Analytics
     "excel": ("excel",),
     "tableau": ("tableau",),
     "spark": ("spark",),
     "hadoop": ("hadoop",),
+    
+    # Methodologies
+    "agile": ("agile",),
+    "scrum": ("scrum",),
+    "oop": ("oop", "object oriented", "object-oriented programming"),
 }
 
 ROLE_SKILL_HINTS: dict[str, tuple[str, ...]] = {
